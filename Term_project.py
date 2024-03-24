@@ -4,6 +4,7 @@ Term Project
 Team Member 1: Madeline Boss (mrb5727)
 Team Member 2: Tariq
 """
+import random
 
 def bootstrap(base_sample, num):
     """
@@ -14,12 +15,20 @@ def bootstrap(base_sample, num):
     output:
     final_list: list of final bootstrapped samples
     """
-    pass
+    final_list  = []
+    sample_size = len(base_sample)
+
+    for __ in range(num):
+        temp_total = 0
+        for __ in range(sample_size):
+            random_pos = random.randint(0, sample_size - 1)
+            temp_total += base_sample[random_pos]
+        bootstrap_sample = temp_total/sample_size
+        final_list.append(bootstrap_sample)
+
+    return final_list
 
 class BST():
-    """
-    Binary Search Tree
-    """
     def __init__():
         pass
 
@@ -38,5 +47,6 @@ class BST():
 def main():
     sample_input = input("What is your orginal sample? ")
     num_samples_input = input("How many bootstrap samples do you want to make (limit is 50)? ")
+
 
     
