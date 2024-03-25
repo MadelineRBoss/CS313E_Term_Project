@@ -2,10 +2,11 @@
 Term Project
 
 Team Member 1: Madeline Boss (mrb5727)
-Team Member 2: Tariq
+Team Member 2: Tariq Ali (taa2536)
 """
 import random
 
+# Code can handle resampling of up to 10,000 with no real issue. Limitations for resampling will be based on binary tree run time
 def bootstrap(base_sample, num):
     """
     inputs:
