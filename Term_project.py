@@ -29,20 +29,24 @@ def bootstrap(base_sample, num):
 
     return final_list
 
+class Node():
+    def __init(self):
+        pass
+
 class BST():
-    def __init__():
+    def __init__(self):
         pass
 
-    def create_tree():
+    def create_tree(self):
         pass
 
-    def medain():
+    def medain(self):
         pass
 
-    def range():
+    def range(self):
         pass
 
-    def mean():
+    def mean(self):
         pass
 
 def main():
