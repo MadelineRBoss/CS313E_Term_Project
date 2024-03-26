@@ -108,7 +108,7 @@ class BootstrapBST():
             #finds variance then square
             sum_of_sqaures += (num - local_mean)**2
         #returns local sd
-        return math.sqrt(sum_of_sqaures/self.length())
+        return math.sqrt(sum_of_sqaures/len(self.base)
 
     def sd_sample_distrubution(self):
         """
