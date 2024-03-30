@@ -7,6 +7,8 @@ Team Member 2: Tariq Ali (taa2536)
 import random
 import math
 
+random.seed(843960)
+
 #dictonary of z values:
 z_star_dict = {0.80: 1.2816, 0.85: 1.4408, 0.90: 1.6449, 0.95: 1.9600,
                0.975: 2.2414, 0.99: 2.5760, 0.995: 2.8070, 0.999: 3.2910}
@@ -89,11 +91,17 @@ class BootstrapBST():
         #to be implemented
         return 0
 
-    def sorted_tree(self):
+    def sorted_tree_mean(self):
         """
         return the BST sorted
         """
         #to be implemented
+        return []
+    
+    def sd_list (self):
+        """
+        return the sds of the sorted BS
+        """
         return []
 
     def length(self):
@@ -109,6 +117,7 @@ class BootstrapBST():
         """
         #Need to find a way to loop through sd values (another class method maybe?)
         sum_of_sd = 0
+        sd_values = self.sd_list()
         for sd in sd_values:
             sum_of_sd += sd
         se = sum_of_sd/self.length()
@@ -152,7 +161,7 @@ class BootstrapBST():
         finds a chance of a mean being reasonable in a sampling distrubution
         """
         chance = 0
-        values = self.sorted_tree()
+        values = self.sorted_tree_mean()
         for val in values:
             if val >= test_mean:
                 chance += 1
@@ -165,3 +174,6 @@ def main():
     """
     sample_input = input("What is your orginal sample? ")
     num_samples_input = input("How many bootstrap samples do you want to make (limit is 50)? ")
+
+my_data = [4, 3, 5, 6,2 ,2, 5,6 ,7, 8, 4,3, 2,2 ]
+print(bootstrap(my_data))
