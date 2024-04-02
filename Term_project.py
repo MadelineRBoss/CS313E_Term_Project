@@ -32,7 +32,7 @@ def bootstrap(base_sample):
         random_pos = random.randint(0, sample_size - 1)
         boot_sample.append(base_sample[random_pos])
         temp_total += base_sample[random_pos]
-    
+
     #get mean
     bootstrap_mean = temp_total/sample_size
 
@@ -51,7 +51,7 @@ class Node():
     """
     def __init__ (self, data_mean, data_sd, lchild = None, rchild = None):
         self.mean = data_mean   # tree is based on mean value
-        self.sd = data_sd   # another data value that is stored for stats anaylsis 
+        self.sd = data_sd   # another data value that is stored for stats anaylsis
         self.lchild = lchild
         self.rchild = rchild
 
@@ -61,54 +61,55 @@ class BootstrapBST():
     """
     def __init__(self, base):
         self.base = base  #when intalized, keeps memory of base sample
-        #rest to be implemented
+        #rest to be implemented (Tariq needs to implement)
 
     def add_tree_value(self):
         """
         Add to tree
         """
-        #to be implemented
+        #(Tariq needs to implement)
         return
 
     def medain(self):
         """
         returns medain of BST
         """
-        #to be implemented
+        #(Tariq needs to implement)
         return
 
     def range(self):
         """
         return BST range (i.e min and max of BST)
         """
-        #to be implemented
+        #(Tariq needs to implement)
         return
 
     def mean(self):
         """
         return mean of BST
         """
-        #to be implemented
+        #(Tariq needs to implement)
         return 0
 
     def sorted_tree_mean(self):
         """
         return the BST sorted
         """
-        #to be implemented
+        #(Tariq needs to implement)
         return []
     
     def sd_list (self):
         """
         return the sds of the sorted BS
         """
+        #(Tariq needs to implement)
         return []
 
     def length(self):
         """
         return length of BST
         """
-        #To be implemented
+        #(Tariq needs to implement)
         return 1
 
     def se(self):
@@ -119,7 +120,7 @@ class BootstrapBST():
         sum_of_sd = 0
         sd_values = self.sd_list()
         for sd in sd_values:
-            sum_of_sd += sd
+            sum_of_sd += sd/math.sqrt(len(self.base))
         se = sum_of_sd/self.length()
 
         return se
@@ -137,7 +138,7 @@ class BootstrapBST():
         bst_se = self.se()
 
         #checks if ci_percentage is in the z star table then grabs it
-        #potentially add binary search algorthim for next best value (lower value) instead of raising exceptions? <-- Get's Tariq's opinion
+        #potentially add binary search algorthim for next best value?
         if ci_percentage not in z_star_dict.keys():
             raise NotImplementedError("z*star value not implemented")
         z_star = z_star_dict[ci_percentage]
@@ -172,8 +173,79 @@ def main():
     """
     mainline logic
     """
+    #gets input for base sample and number of synethic samples
     sample_input = input("What is your orginal sample? ")
     num_samples_input = input("How many bootstrap samples do you want to make (limit is 50)? ")
+    choice = 0
 
-my_data = [4, 3, 5, 6,2 ,2, 5,6 ,7, 8, 4,3, 2,2 ]
-print(bootstrap(my_data))
+    #tree is created
+    my_tree = BootstrapBST(sample_input)
+    #Make code to add bootstraps to tree
+
+    #interactions with BST
+    while choice != 7:
+        #Choices
+        print("Now that we have made a sampling distrubution what would you like to do with it?")
+        print("1) Find the mean")
+        print("2) Find the median")
+        print("3) Find the range")
+        print("4) Find the standard error")
+        print("5) Find a Confidence Interval for it")
+        print("6) Test another mean against your sampling distrubution")
+        print("7) End interface")
+        choice = int(input("Please type the respetive number "))
+
+        #Invalid Choice
+        if 7 >= choice >= 1:
+            print("Thats an invalid option")
+            break
+
+        # End Interface Option
+        if choice == 7:
+            break
+
+        # print mean (Tariq needs to implement)
+        if choice == 1:
+            pass
+
+        # print median (Tariq needs to implement)
+        if choice == 2:
+            pass
+
+        # print range (Tariq needs to implement)
+        if choice == 3:
+            pass
+
+        # find Standard Error
+        if choice == 4:
+            print(f'The standard error is {my_tree.se()}')
+        
+        # find Confidence interval
+        elif choice == 5:
+            print("Choose your confidence level")
+            print("80\n85\n90\n95\n97.5\n99\n99.5\n99.9")
+            approved_ci_list = [80, 85, 90, 95, 97.5, 99, 99.5, 99.5]
+            ci_choice = float(input())
+            if ci_choice not in approved_ci_list:
+                print("Invalid choice. You'll be returned to the main menu")
+                break
+            ci_min, ci_max = my_tree.ci(ci_choice)
+            print(f'Your {ci_choice}% Confidence Interval is {ci_min}-{ci_max}')
+
+        # test different mean
+        elif choice == 6:
+            test_mean = float(input("First, what mean do you want to test it with? "))
+            print("Secondly, choose your confidence level")
+            print("80\n85\n90\n95\n97.5\n99\n99.5\n99.9")
+            approved_ci_list = [80, 85, 90, 95, 97.5, 99, 99.5, 99.5]
+            ci_choice = float(input())
+            if ci_choice not in approved_ci_list:
+                print("Invalid choice. You'll be returned to the main menu")
+                break
+            chance = my_tree.test_mean(test_mean)
+            if chance >= 100 - ci_choice:
+                print(f'With your confidence level of {ci_choice}% and probability of {test_mean}\
+                       being {chance}, your mean is not abnormal')
+            else:
+                print(f'With your confidence level of {ci_choice}% and probability of {test_mean}\
+                       being {chance}, your mean is abnormal')
