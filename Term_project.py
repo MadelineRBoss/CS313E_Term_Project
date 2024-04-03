@@ -36,14 +36,7 @@ def bootstrap(base_sample):
     #get mean
     bootstrap_mean = temp_total/sample_size
 
-    #get sd
-    square_of_sums = 0
-    for num in boot_sample:
-        square_of_sums += ((num - bootstrap_mean) ** 2)
-    square_of_sums /= sample_size
-    bootstrap_sd = math.sqrt(square_of_sums)
-
-    return round(bootstrap_mean,2), round(bootstrap_sd,2)
+    return round(bootstrap_mean,2)
 
 class Node():
     """
@@ -51,7 +44,6 @@ class Node():
     """
     def __init__ (self, data_mean, data_sd, lchild = None, rchild = None):
         self.mean = data_mean   # tree is based on mean value
-        self.sd = data_sd   # another data value that is stored for stats anaylsis
         self.lchild = lchild
         self.rchild = rchild
 
@@ -97,13 +89,6 @@ class BootstrapBST():
         """
         #(Tariq needs to implement)
         return []
-    
-    def sd_list (self):
-        """
-        return the sds of the sorted BS
-        """
-        #(Tariq needs to implement)
-        return []
 
     def length(self):
         """
@@ -118,9 +103,10 @@ class BootstrapBST():
         """
         #Need to find a way to loop through sd values (another class method maybe?)
         sum_of_sd = 0
-        sd_values = self.sd_list()
-        for sd in sd_values:
-            sum_of_sd += sd/math.sqrt(len(self.base))
+        mean_list = self.sorted_tree_mean()
+        BST_mean = self.mean()
+        for m in mean_list:
+            sum_of_sd += (m - BST_mean)**2
         se = sum_of_sd/self.length()
 
         return se
