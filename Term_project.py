@@ -55,47 +55,91 @@ class BootstrapBST():
         self.base = base  #when intalized, keeps memory of base sample
         #rest to be implemented (Tariq needs to implement)
 
-    def add_tree_value(self):
+    def add_tree_value(self, val):
         """
         Add to tree
         """
-        #(Tariq needs to implement)
-        return
+        new_node = Node(val)
+        if self.base is None:
+            self.base = new_node
+        else:
+            current = self.base
+            parent = self.base
 
-    def medain(self):
+            while current is not None:
+                parent = current
+                if val < current.mean:
+                    current = current.lChild
+                else:
+                    current = current.rChild
+
+            if val < parent.mean:
+                parent.lChild = new_node
+            else:
+                parent.rChild = new_node
+
+    def median(self):
         """
-        returns medain of BST
+        returns median of BST
         """
-        #(Tariq needs to implement)
-        return
+        sorted_list = self.sorted_tree_mean()
+        median = sorted_list[len(sorted_list) // 2]
+        
+        return median
+
+    def minimum(self):
+        current = self.base
+        parent = current
+        while (current != None):
+            parent = current
+            current = current.lChild
+        return parent
+
+    def maximum(self):
+        current = self.base
+        parent = current
+        while (current != None):
+            parent = current
+            current = current.rChild
+        return parent
 
     def range(self):
         """
         return BST range (i.e min and max of BST)
         """
-        #(Tariq needs to implement)
-        return
+        min_bst = self.minimum()
+        max_bst = self.maximum()
+        
+        return max_bst - min_bst
 
     def mean(self):
         """
         return mean of BST
         """
         #(Tariq needs to implement)
-        return 0
+        return sum(self.sorted_tree_mean()) / self.length()
 
     def sorted_tree_mean(self):
         """
         return the BST sorted
         """
-        #(Tariq needs to implement)
-        return []
+        sorted_tree = []
+        self.in_order_traversal(self.base, sorted_tree)
+        
+        return sorted_tree
+
+    def in_order_traversal(self, node, sorted_tree):
+        if node:
+            self.in_order_traversal(node.lChild, sorted_tree)
+            sorted_tree.append(node.key)
+            self.in_order_traversal(node.rChild, sorted_tree)
 
     def length(self):
         """
         return length of BST
         """
         #(Tariq needs to implement)
-        return 1
+        return len(self.sorted_tree_mean())
 
     def se(self):
         """
