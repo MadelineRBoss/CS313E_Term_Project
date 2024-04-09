@@ -109,8 +109,8 @@ class BootstrapBST():
         """
         return BST range (i.e min and max of BST)
         """
-        min_bst = self.minimum()
-        max_bst = self.maximum()
+        min_bst = self.minimum().mean
+        max_bst = self.maximum().mean
         
         return max_bst - min_bst
 
@@ -220,8 +220,8 @@ def main():
     sample_input = input("What is your orginal sample? ")
     sample_input_list = sample_input.split()
     for ps, sample in enumerate(sample_input_list):
-        sample_input_list[ps] = int(sample)
-    num_samples_input = int(input("How many bootstrap samples do you want to make (limit is 50)? "))
+        sample_input_list[ps] = float(sample)
+    num_samples_input = int(input("How many bootstrap samples do you want to make? "))
     choice = 0
 
     #tree is created
@@ -254,15 +254,15 @@ def main():
 
         # print mean (Tariq needs to implement)
         if choice == 1:
-            pass
+            print(f'The mean is {round(my_tree.mean(), 2)}')
 
         # print median (Tariq needs to implement)
         if choice == 2:
-            pass
+            print(f'The median is {my_tree.median()}')
 
         # print range (Tariq needs to implement)
         if choice == 3:
-            pass
+            print(f'The range is {my_tree.range()}')
 
         # find Standard Error
         if choice == 4:
