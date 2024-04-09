@@ -178,37 +178,38 @@ class BootstrapBST():
             raise NotImplementedError("z*star value not implemented")
         z_star = z_star_dict[ci_percentage/100]
 
+        #finds the min and max values in the condience interval
         ci_min = round(bst_mean - z_star*bst_se, 2)
         ci_max = round(bst_mean + z_star*bst_se, 2)
 
         return ci_min, ci_max
 
-    def stat_signficant(self, value, ci_percentage):
-        """
-        checks if sample value is in CI (or rather, if it's signficant)
-        """
-        ci_min, ci_max = self.ci(ci_percentage)
-        if ci_min < value < ci_max:
-            return True
-        return False
-
     def test_mean(self, test_mean, side):
         """
         finds a chance of a mean being reasonable in a sampling distrubution
         """
-        if side == 1:
+        #checks rarity of getting a value thats less than or greater than test_mean
+        if side == 2:
             chance = 0
             values = self.sorted_tree_mean()
+            #finds how many times in the BST there's a value less than or equal to the test_mean
             for val in values:
                 if val <= test_mean:
                     chance += 1
+            
+            #returns the chance out of the length of the BST
             return round(chance/self.length(), 4)
-        else:
+        
+        #checks rarity of getting a value thats greater than or greater than test_mean
+        elif side == 1:
             chance = 0
             values = self.sorted_tree_mean()
+            #finds how many times in the BST there's a value greaterthan or equal to the test_mean
             for val in values:
                 if val >= test_mean:
                     chance += 1
+                    
+            #returns the chance out of the length of the BST
             return round(chance/self.length(), 4)
 
 
@@ -271,14 +272,14 @@ def main():
         # find Confidence interval
         elif choice == 5:
             print("Choose your confidence level")
-            print("80\n85\n90\n95\n97.5\n99\n99.5\n99.9")
-            approved_ci_list = [80, 85, 90, 95, 97.5, 99, 99.5, 99.5]
+            print("80, 85, 90, 95, 97.5, 99, 99.5, 99.9")
+            approved_ci_list = [80, 85, 90, 95, 97.5, 99, 99.5, 99.9]
             ci_choice = float(input())
             if ci_choice not in approved_ci_list:
                 print("Invalid choice. You'll be returned to the main menu")
-                break
-            ci_min, ci_max = my_tree.ci(ci_choice)
-            print(f'Your {ci_choice}% Confidence Interval is {ci_min}-{ci_max}')
+            else:
+                ci_min, ci_max = my_tree.ci(ci_choice)
+                print(f'Your {ci_choice}% Confidence Interval is {ci_min}-{ci_max}')
 
         # test different mean
         elif choice == 6:
@@ -287,25 +288,28 @@ def main():
             
             #Get CI level
             print("Secondly, choose your confidence level")
-            print("80\n85\n90\n95\n97.5\n99\n99.5\n99.9")
+            print("80, 85, 90, 95, 97.5, 99, 99.5, 99.9")
             approved_ci_list = [80, 85, 90, 95, 97.5, 99, 99.5, 99.5]
             ci_choice = float(input())
             if ci_choice not in approved_ci_list:
                 print("Invalid choice. You'll be returned to the main menu")
-                break
-            ci_min, ci_max = my_tree.ci(ci_choice)
-
-            #get which side to test
-            side = 0
-            while side not in (1, 2):
-                side = int(input("Do you expect this mean to be higher or lower than the expect mean? Type the coresponding number\
-                            \n1) Higher\n2) Lower\n"))
-            chance = my_tree.test_mean(test_mean, side)
-            if chance >= 100 - ci_choice:
-                print(f'With your confidence level of {ci_choice}% and probability of getting {test_mean}\
-                        or rarer being {chance}, your mean is not abnormal')
             else:
-                print(f'With your confidence level of {ci_choice}% and probability of getting {test_mean}\
-                        or rarer being {chance}, your mean is abnormal')
+                ci_min, ci_max = my_tree.ci(ci_choice)
+                print(f'Your {ci_choice}% Confidence Interval is {ci_min}-{ci_max}')
+
+                #get which side to test
+                side = 0
+                while side not in [1, 2]:
+                    side = int(input("Do you expect this mean to be higher or lower than the expect mean? Type the coresponding number"
+                                "\n1) Higher\n2) Lower\n"))
+                chance = my_tree.test_mean(test_mean, side)
+                
+                #checks if mean is in the CI (normal mean)
+                if ci_max >= test_mean >= ci_min:
+                    print(f'With your confidence level of {ci_choice}% and probability of getting {test_mean}'
+                            f'or rarer being {chance}, your mean is not abnormal')
+                else:
+                    print(f'With your confidence level of {ci_choice}% and probability of getting {test_mean}'
+                            f'or rarer being {chance}, your mean is abnormal')
 
 main()
