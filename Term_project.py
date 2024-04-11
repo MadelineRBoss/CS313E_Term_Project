@@ -85,8 +85,16 @@ class BootstrapBST():
         returns median of BST
         """
         sorted_list = self.sorted_tree_mean()
-        median = sorted_list[len(sorted_list) // 2]
-        
+        size = self.length()
+
+        if self.length() % 2 == 0:
+            median = sorted_list[size // 2] + sorted_list[(size // 2) - 1]
+            median /= 2
+            median = round(median,2)
+
+        else:
+            median = sorted_list[len(sorted_list) // 2]
+
         return median
 
     def minimum(self):
@@ -112,7 +120,7 @@ class BootstrapBST():
         min_bst = self.minimum().mean
         max_bst = self.maximum().mean
         
-        return max_bst - min_bst
+        return round(max_bst - min_bst,2)
 
     def mean(self):
         """
@@ -222,8 +230,9 @@ def main():
     sample_input_list = sample_input.split()
     for ps, sample in enumerate(sample_input_list):
         sample_input_list[ps] = float(sample)
-    num_samples_input = int(input("How many bootstrap samples do you want to make? "))
-    choice = 0
+    num_samples_input = math.inf
+    while num_samples_input > 1000:
+        num_samples_input = int(input("How many bootstrap samples do you want to make? (limit to 1000) "))
 
     #tree is created
     my_tree = BootstrapBST(sample_input_list)
@@ -231,6 +240,7 @@ def main():
         my_tree.add_tree_value()
     #Make code to add bootstraps to tree
 
+    choice = 0
     #interactions with BST
     while choice != 7:
         #Choices
@@ -244,6 +254,7 @@ def main():
         print("6) Test another mean against your sampling distrubution")
         print("7) End interface")
         choice = int(input("Please type the respetive number "))
+        print()
 
         if 7 < choice < 1:
             print("Thats an invalid option")
