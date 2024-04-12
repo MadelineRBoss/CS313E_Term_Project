@@ -4,7 +4,3 @@ The following GitHub project stimulates the process of bootstrapping, a statisti
 ## Teammates
 Team Member 1 Name: Madeline Boss
 
-Team Member 1 EID: mrb5727
-
-## Course Name: CS 313E - Elements of Software Design
-## Unique Number: 50775
