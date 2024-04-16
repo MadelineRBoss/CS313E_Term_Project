@@ -204,6 +204,8 @@ class BootstrapBST():
             for val in values:
                 if val <= test_mean:
                     chance += 1
+                else:
+                    break
             
             #returns the chance out of the length of the BST
             return round(chance/self.length(), 4)
@@ -213,9 +215,11 @@ class BootstrapBST():
             chance = 0
             values = self.sorted_tree_mean()
             #finds how many times in the BST there's a value greaterthan or equal to the test_mean
-            for val in values:
-                if val >= test_mean:
+            for val in range(len(values)-1, -1, -1):
+                if values[val] >= test_mean:
                     chance += 1
+                else:
+                    break
                     
             #returns the chance out of the length of the BST
             return round(chance/self.length(), 4)
@@ -231,7 +235,7 @@ def main():
     for ps, sample in enumerate(sample_input_list):
         sample_input_list[ps] = float(sample)
     num_samples_input = math.inf
-    while num_samples_input > 1000:
+    while num_samples_input > 10000:
         num_samples_input = int(input("How many bootstrap samples do you want to make? (limit to 1000) "))
 
     #tree is created
@@ -306,7 +310,6 @@ def main():
                 print("Invalid choice. You'll be returned to the main menu")
             else:
                 ci_min, ci_max = my_tree.ci(ci_choice)
-                print(f'Your {ci_choice}% Confidence Interval is {ci_min}-{ci_max}')
 
                 #get which side to test
                 side = 0
@@ -318,9 +321,9 @@ def main():
                 #checks if mean is in the CI (normal mean)
                 if ci_max >= test_mean >= ci_min:
                     print(f'With your confidence level of {ci_choice}% and probability of getting {test_mean}'
-                            f'or rarer being {chance}, your mean is not abnormal')
+                            f' or rarer being {chance}, your mean is not abnormal')
                 else:
                     print(f'With your confidence level of {ci_choice}% and probability of getting {test_mean}'
-                            f'or rarer being {chance}, your mean is abnormal')
+                            f' or rarer being {chance}, your mean is abnormal')
 
 main()
