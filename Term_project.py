@@ -272,11 +272,11 @@ def main():
     #gets input for base sample input
     samples_not_made = True
     while samples_not_made:
-        sample_input = input("What is your orginal sample? Please make all values numbers. ")
+        sample_input = input("What is your orginal sample? ")
         sample_input_list = sample_input.split()
         samples_not_made = False
         for ps, sample in enumerate(sample_input_list):
-            if not sample.isnumeric():
+            if not sample.replace(".", "").isnumeric():
                 samples_not_made = True
                 break
             sample_input_list[ps] = float(sample)
@@ -284,7 +284,7 @@ def main():
     #gets number of samples input
     num_samples_input = math.inf
     while num_samples_input > 10000 or num_samples_input <= 0:
-        print("How many bootstrap samples do you want to make? Please make at minimum 1 sample. Any floats will be rounded")
+        print("How many bootstrap samples do you want to make? Please make at minimum 1 sample. Please make it a whole number")
         print("Also please note while you can make up to 10,000 samples, if you make more than 1,000 you may run into an error")
         num_samples_input = input()
         if not num_samples_input.isnumeric():
@@ -314,7 +314,7 @@ def main():
 
         choice = input("Please type the respetive number ")
 
-        while not choice.isnumeric():
+        while not choice.isdigit():
             print()
             print("Now that we have made a sampling distrubution what would you like to do with it?")
             print("1) Find the mean")
@@ -380,7 +380,7 @@ def main():
         elif choice == 6:
             #get mean to test
             test_mean = ""
-            while not test_mean.isnumeric():
+            while not test_mean.replace(".", "").isnumeric():
                 test_mean = input("First, what mean do you want to test it with? ")
             test_mean = float(test_mean)
 
