@@ -60,10 +60,15 @@ class BootstrapBST():
         """
         Add to tree
         """
+        #make new_node from function bootstrap
         new_node = Node(bootstrap(self.base))
         val = new_node.mean
+
+        #checks if root is empty
         if self.root is None:
             self.root = new_node
+
+        #finds next null value to replace with new_node
         else:
             current = self.root
             parent = self.root
@@ -87,28 +92,41 @@ class BootstrapBST():
         sorted_list = self.sorted_tree_mean()
         size = self.length()
 
+        #checks if there's a list to get a median
+        if self.length() == 0:
+            median = None
+
+        #checks to see if the list has an even amount of values
         if self.length() % 2 == 0:
             median = sorted_list[size // 2] + sorted_list[(size // 2) - 1]
             median /= 2
             median = round(median,2)
 
+        #checks to see if the list has an odd amount of values
         else:
             median = sorted_list[len(sorted_list) // 2]
 
         return median
 
     def minimum(self):
+        """
+        Finds minimum value in BST
+        """
         current = self.root
         parent = current
-        while (current != None):
+
+        while current is not None:
             parent = current
             current = current.lchild
         return parent
 
     def maximum(self):
+        """
+        Finds maximum value in BST
+        """
         current = self.root
         parent = current
-        while (current != None):
+        while current is not None:
             parent = current
             current = current.rchild
         return parent
@@ -119,14 +137,22 @@ class BootstrapBST():
         """
         min_bst = self.minimum().mean
         max_bst = self.maximum().mean
-        
-        return round(max_bst - min_bst,2)
+
+        #checks if the list is empty
+        if min_bst is None or max_bst is None:
+            return 0
+
+        #return range
+        return abs(round(max_bst - min_bst,2))
 
     def mean(self):
         """
         return mean of BST
         """
-        #(Tariq needs to implement)
+
+        if self.length() == 0:
+            return None
+
         return sum(self.sorted_tree_mean()) / self.length()
 
     def sorted_tree_mean(self):
@@ -134,8 +160,10 @@ class BootstrapBST():
         return the BST sorted
         """
         sorted_tree = []
-        self.in_order_traversal(self.root, sorted_tree)
+        if self.root is None:
+            return sorted_tree
         
+        self.in_order_traversal(self.root, sorted_tree)
         return sorted_tree
 
     def in_order_traversal(self, node, sorted_tree):
@@ -151,17 +179,21 @@ class BootstrapBST():
         """
         return length of BST
         """
-        #(Tariq needs to implement)
         return len(self.sorted_tree_mean())
 
     def se(self):
         """
         gets standard error
         """
-        #Need to find a way to loop through sd values (another class method maybe?)
         sum_of_sd = 0
         mean_list = self.sorted_tree_mean()
         BST_mean = self.mean()
+
+        #checks if there's a list to get se
+        if BST_mean is None:
+            return None
+
+        #finds standard error
         for m in mean_list:
             sum_of_sd += (m - BST_mean)**2
         se = math.sqrt(sum_of_sd/self.length())
@@ -180,6 +212,10 @@ class BootstrapBST():
         bst_mean = self.mean()
         bst_se = self.se()
 
+        #checks if there is a list to get ci
+        if bst_mean is None:
+            return None
+
         #checks if ci_percentage is in the z star table then grabs it
         #potentially add binary search algorthim for next best value?
         if ci_percentage/100 not in z_star_dict.keys():
@@ -196,6 +232,10 @@ class BootstrapBST():
         """
         finds a chance of a mean being reasonable in a sampling distrubution
         """
+        #checks if BST is empty
+        if self.length() == 0:
+            return None
+
         #checks rarity of getting a value thats less than or greater than test_mean
         if side == 2:
             chance = 0
@@ -229,14 +269,28 @@ def main():
     """
     mainline logic
     """
-    #gets input for base sample and number of synethic samples
-    sample_input = input("What is your orginal sample? ")
-    sample_input_list = sample_input.split()
-    for ps, sample in enumerate(sample_input_list):
-        sample_input_list[ps] = float(sample)
+    #gets input for base sample input
+    samples_not_made = True
+    while samples_not_made:
+        sample_input = input("What is your orginal sample? Please make all values numbers. ")
+        sample_input_list = sample_input.split()
+        samples_not_made = False
+        for ps, sample in enumerate(sample_input_list):
+            if not sample.isnumeric():
+                samples_not_made = True
+                break
+            sample_input_list[ps] = float(sample)
+
+    #gets number of samples input
     num_samples_input = math.inf
-    while num_samples_input > 10000:
-        num_samples_input = int(input("How many bootstrap samples do you want to make? (limit to 1000) "))
+    while num_samples_input > 10000 or num_samples_input <= 0:
+        print("How many bootstrap samples do you want to make? Please make at minimum 1 sample. Any floats will be rounded")
+        print("Also please note while you can make up to 10,000 samples, if you make more than 1,000 you may run into an error")
+        num_samples_input = input()
+        if not num_samples_input.isnumeric():
+            num_samples_input = math.inf
+        else:
+            num_samples_input = int(round(float(num_samples_input)))
 
     #tree is created
     my_tree = BootstrapBST(sample_input_list)
@@ -257,7 +311,24 @@ def main():
         print("5) Find a Confidence Interval for it")
         print("6) Test another mean against your sampling distrubution")
         print("7) End interface")
-        choice = int(input("Please type the respetive number "))
+
+        choice = input("Please type the respetive number ")
+
+        while not choice.isnumeric():
+            print()
+            print("Now that we have made a sampling distrubution what would you like to do with it?")
+            print("1) Find the mean")
+            print("2) Find the median")
+            print("3) Find the range")
+            print("4) Find the standard error")
+            print("5) Find a Confidence Interval for it")
+            print("6) Test another mean against your sampling distrubution")
+            print("7) End interface")
+
+            choice = input("Please type the respetive number ")
+        
+        choice = int(round(float(choice)))
+
         print()
 
         if 7 < choice < 1:
@@ -288,42 +359,64 @@ def main():
         elif choice == 5:
             print("Choose your confidence level")
             print("80, 85, 90, 95, 97.5, 99, 99.5, 99.9")
-            approved_ci_list = [80, 85, 90, 95, 97.5, 99, 99.5, 99.9]
-            ci_choice = float(input())
-            if ci_choice not in approved_ci_list:
-                print("Invalid choice. You'll be returned to the main menu")
-            else:
-                ci_min, ci_max = my_tree.ci(ci_choice)
-                print(f'Your {ci_choice}% Confidence Interval is {ci_min}-{ci_max}')
+            print()
+            approved_ci_list = ["80", "85", "90", "95", "97.5", "99", "99.5", "99.9"]
+
+            ci_choice = input()
+            #check if option was a number
+            while ci_choice not in approved_ci_list:
+                print("Thats not an option, try again")
+                print("Choose your confidence level")
+                print("80, 85, 90, 95, 97.5, 99, 99.5, 99.9")
+                ci_choice = input()
+                print()
+            ci_choice = float(ci_choice)
+
+            #returns confidence interval
+            ci_min, ci_max = my_tree.ci(ci_choice)
+            print(f'Your {ci_choice}% Confidence Interval is {ci_min}-{ci_max}')
 
         # test different mean
         elif choice == 6:
             #get mean to test
-            test_mean = float(input("First, what mean do you want to test it with? "))
-            
+            test_mean = ""
+            while not test_mean.isnumeric():
+                test_mean = input("First, what mean do you want to test it with? ")
+            test_mean = float(test_mean)
+
             #Get CI level
             print("Secondly, choose your confidence level")
             print("80, 85, 90, 95, 97.5, 99, 99.5, 99.9")
-            approved_ci_list = [80, 85, 90, 95, 97.5, 99, 99.5, 99.5]
-            ci_choice = float(input())
-            if ci_choice not in approved_ci_list:
-                print("Invalid choice. You'll be returned to the main menu")
-            else:
-                ci_min, ci_max = my_tree.ci(ci_choice)
+            approved_ci_list = ["80", "85", "90", "95", "97.5", "99", "99.5", "99.9"]
+            ci_choice = input()
+            #check if ci_choice was a number
+            while ci_choice not in approved_ci_list:
+                print("Thats not an option, try again")
+                print("Choose your confidence level")
+                print("80, 85, 90, 95, 97.5, 99, 99.5, 99.9")
+                ci_choice = input()
+                print()
+            ci_choice = float(ci_choice)
 
-                #get which side to test
-                side = 0
-                while side not in [1, 2]:
-                    side = int(input("Do you expect this mean to be higher or lower than the expect mean? Type the coresponding number"
-                                "\n1) Higher\n2) Lower\n"))
-                chance = my_tree.test_mean(test_mean, side)
-                
-                #checks if mean is in the CI (normal mean)
-                if ci_max >= test_mean >= ci_min:
-                    print(f'With your confidence level of {ci_choice}% and probability of getting {test_mean}'
-                            f' or rarer being {chance}, your mean is not abnormal')
-                else:
-                    print(f'With your confidence level of {ci_choice}% and probability of getting {test_mean}'
-                            f' or rarer being {chance}, your mean is abnormal')
+            #contuine with testing mean
+
+            ci_min, ci_max = my_tree.ci(ci_choice)
+
+            #get which side to test
+            side = 0
+            while side not in ["1", "2"]:
+                side = input("Do you expect this mean to be higher or lower than the expect mean? Type the coresponding number"
+                            "\n1) Higher\n2) Lower\n")
+            side = int(side)
+    
+            chance = my_tree.test_mean(test_mean, side)
+            
+            #checks if mean is in the CI (normal mean)
+            if ci_max >= test_mean >= ci_min:
+                print(f'With your confidence level of {ci_choice}% and probability of getting {test_mean}'
+                        f' or rarer being {chance}, your mean is not abnormal')
+            else:
+                print(f'With your confidence level of {ci_choice}% and probability of getting {test_mean}'
+                        f' or rarer being {chance}, your mean is abnormal')
 
 main()
