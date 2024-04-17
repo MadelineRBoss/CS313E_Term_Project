@@ -93,11 +93,11 @@ class BootstrapBST():
         size = self.length()
 
         #checks if there's a list to get a median
-        if self.length() == 0:
+        if size == 0:
             median = None
 
         #checks to see if the list has an even amount of values
-        if self.length() % 2 == 0:
+        if size % 2 == 0:
             median = sorted_list[size // 2] + sorted_list[(size // 2) - 1]
             median /= 2
             median = round(median,2)
