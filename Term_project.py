@@ -93,11 +93,11 @@ class BootstrapBST():
         size = self.length()
 
         #checks if there's a list to get a median
-        if size == 0:
+        if self.length() == 0:
             median = None
 
         #checks to see if the list has an even amount of values
-        if size % 2 == 0:
+        if self.length() % 2 == 0:
             median = sorted_list[size // 2] + sorted_list[(size // 2) - 1]
             median /= 2
             median = round(median,2)
@@ -190,7 +190,7 @@ class BootstrapBST():
         BST_mean = self.mean()
 
         #checks if there's a list to get se
-        if BST_mean is None:
+        if self.length() == 0:
             return None
 
         #finds standard error
@@ -314,7 +314,7 @@ def main():
 
         choice = input("Please type the respetive number ")
 
-        while not choice.isdigit():
+        while not choice.isdigit() or 8 < int(choice) < 0:
             print()
             print("Now that we have made a sampling distrubution what would you like to do with it?")
             print("1) Find the mean")
