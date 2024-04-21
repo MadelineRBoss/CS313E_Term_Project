@@ -85,6 +85,13 @@ class BootstrapBST():
             else:
                 parent.rchild = new_node
 
+        sorted_tree = []
+        if self.root is None:
+            return sorted_tree
+        
+        self.in_order_traversal(self.root, sorted_tree)
+        return sorted_tree
+
     def median(self):
         """
         returns median of BST
@@ -155,16 +162,6 @@ class BootstrapBST():
 
         return sum(self.sorted_tree_mean()) / self.length()
 
-    def sorted_tree_mean(self):
-        """
-        return the BST sorted
-        """
-        sorted_tree = []
-        if self.root is None:
-            return sorted_tree
-        
-        self.in_order_traversal(self.root, sorted_tree)
-        return sorted_tree
 
     def in_order_traversal(self, node, sorted_tree):
         """
