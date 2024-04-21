@@ -85,13 +85,6 @@ class BootstrapBST():
             else:
                 parent.rchild = new_node
 
-        sorted_tree = []
-        if self.root is None:
-            return sorted_tree
-        
-        self.in_order_traversal(self.root, sorted_tree)
-        return sorted_tree
-
     def median(self):
         """
         returns median of BST
@@ -162,6 +155,16 @@ class BootstrapBST():
 
         return sum(self.sorted_tree_mean()) / self.length()
 
+    def sorted_tree_mean(self):
+        """
+        return the BST sorted
+        """
+        sorted_tree = []
+        if self.root is None:
+            return sorted_tree
+        
+        self.in_order_traversal(self.root, sorted_tree)
+        return sorted_tree
 
     def in_order_traversal(self, node, sorted_tree):
         """
@@ -197,7 +200,7 @@ class BootstrapBST():
 
         return se
 
-    def ci(self, ci_percentage = 0.95):
+    def ci(self, ci_percentage = 95):
         """
         Finds Confidence Interval (CI)
 
@@ -287,7 +290,7 @@ def main():
         if not num_samples_input.isnumeric():
             num_samples_input = math.inf
         else:
-            num_samples_input = int(round(float(num_samples_input)))
+            num_samples_input = int(num_samples_input)
 
     #tree is created
     my_tree = BootstrapBST(sample_input_list)
@@ -324,7 +327,7 @@ def main():
 
             choice = input("Please type the respetive number ")
         
-        choice = int(round(float(choice)))
+        choice = int(choice)
 
         print()
 
